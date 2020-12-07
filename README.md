@@ -48,3 +48,20 @@ If you want to learn more about building native executables, please consult http
 <p>A Hello World RESTEasy resource</p>
 
 Guide: https://quarkus.io/guides/rest-json
+
+# PostgreSQL
+
+Create database:
+`createdb employees_db`
+
+Create user with password:
+`psql employees_db`
+`create user app_user with encrypted password 'complex_password';`
+
+Start and stop the database server:
+`pg_ctl -D  /usr/local/var/postgres start`
+
+`pg_ctl -D  /usr/local/var/postgres stop`
+
+How to connect to db:
+`psql postgresql://app_user:complex_password@localhost:5432/employees_db`

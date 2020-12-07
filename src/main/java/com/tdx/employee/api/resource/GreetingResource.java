@@ -1,4 +1,4 @@
-package com.tdx.employee.api;
+package com.tdx.employee.api.resource;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
