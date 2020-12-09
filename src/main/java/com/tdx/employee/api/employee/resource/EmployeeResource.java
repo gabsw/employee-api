@@ -21,15 +21,17 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.time.LocalDate;
+import java.net.URI;
 import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
-@Path("/api/employee")
+@Path(EmployeeResource.RESOURCE_PATH)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class EmployeeResource {
+    public static final String RESOURCE_PATH = "/api/employee";
+
     @Context
     UriInfo uriInfo;
 
@@ -66,7 +68,7 @@ public class EmployeeResource {
     public Response createEmployee(@Valid @NotNull final EmployeeDTO employeeDTO) {
         return repository.create(employeeDTO.toEmployee())
                          .map(emp -> uriInfo.getAbsolutePathBuilder()
-                                             .replacePath("/api/employee/")
+                                             .path(RESOURCE_PATH)
                                              .queryParam("id", emp.getId())
                                             .build())
                          .map(Response::created)
