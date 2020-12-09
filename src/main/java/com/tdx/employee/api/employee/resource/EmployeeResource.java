@@ -21,7 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -54,7 +54,7 @@ public class EmployeeResource {
         return Response.ok(employees).build();
     }
 
-    /*@GET
+ /*   @GET
     @Path("/")
     public Response getByStartDate(
         @QueryParam("from_date") final LocalDate fromDate,
@@ -88,7 +88,7 @@ public class EmployeeResource {
     @DELETE
     @Path("/{id}")
     public Response deleteEmployee(@PathParam("id") final Long id) {
-//        Follows the Java reference guide
+//        Following the Java reference guide
 //        return repository.delete(id)
 //            .map(emp -> Response.noContent())
 //            .orElse(Response.status(Response.Status.NOT_FOUND))
