@@ -29,14 +29,14 @@ public class EmployeeRepository implements PanacheRepository<Employee> {
                  .getResultList();
     }
 
-    // Alternative using Panache methods
+    // Alternatives using Panache methods
     public List<Employee> findByTitle(Title title) {
         return find("title", title).list();
     }
 
     public List<Employee> findBetweenDates(final LocalDate fromDate, final LocalDate toDate) {
         return find("start_date BETWEEN :fromDate AND :toDate",
-                    Parameters.with("fromData", fromDate).and("toDate", toDate))
+                    Parameters.with("fromDate", fromDate).and("toDate", toDate))
             .list();
     }
 

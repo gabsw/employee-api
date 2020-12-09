@@ -31,6 +31,5 @@ public class EmployeeDTO {
     public Employee toEmployee() {
         return EmployeeMapper.INSTANCE.toEntity(this);
     }
-
-
 }
+

@@ -54,14 +54,17 @@ public class EmployeeResource {
         return Response.ok(employees).build();
     }
 
- /*   @GET
-    @Path("/")
+    // JAX-RS does not allow methods with different signatures for the same path
+    // I will use the diff path as a temporary workaround
+    // However, the optimal solution would be joining the title and date filters
+    // through Hibernate Criteria Query
+    @GET
+    @Path("/diff/")
     public Response getByStartDate(
         @QueryParam("from_date") final LocalDate fromDate,
         @QueryParam("to_date") final LocalDate toDate) {
         return Response.ok(repository.findBetweenDates(fromDate, toDate)).build();
-    }*/
-
+    }
 
     @POST
     @Path("/")
