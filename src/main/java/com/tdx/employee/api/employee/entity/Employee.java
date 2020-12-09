@@ -14,6 +14,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -30,7 +31,13 @@ import java.time.LocalDate;
     name = "title",
     typeClass = PostgreSQLEnumType.class
 )
+@NamedQuery(name = Employee.FIND_BY_TITLE,
+            query = "SELECT e " +
+                    "FROM Employee e " +
+                    "WHERE e.title = :title")
 public class Employee {
+    public static final String FIND_BY_TITLE = "findByTitle";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

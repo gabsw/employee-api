@@ -40,7 +40,7 @@ public class EmployeeResource {
     @Path("/{id}")
     public Response getById(@PathParam("id") final Long id) {
         return repository.findByIdOptional(id)
-                         .map(Response::ok) // emp -> Response.ok(emp)
+                         .map(Response::ok)
                          .orElse(Response.status(NOT_FOUND))
                          .build();
     }
@@ -48,7 +48,7 @@ public class EmployeeResource {
     @GET
     @Path("/")
     public Response getByTitle(@QueryParam("title") final Title title) {
-        final List<Employee> employees = repository.find("title", title).list();
+        final List<Employee> employees = repository.findByTitleUsingNamedQuery(title);
         return Response.ok(employees).build();
     }
 
@@ -66,9 +66,9 @@ public class EmployeeResource {
     public Response createEmployee(@Valid @NotNull final EmployeeDTO employeeDTO) {
         return repository.create(employeeDTO.toEmployee())
                          .map(emp -> uriInfo.getAbsolutePathBuilder()
-                                            .path(Employee.class)
-                                            .path(Employee.class, "getById")
-                                            .build(emp.getId()))
+                                             .replacePath("/api/employee/")
+                                             .queryParam("id", emp.getId())
+                                            .build())
                          .map(Response::created)
                          .orElse(Response.status(NOT_FOUND))
                          .build();
