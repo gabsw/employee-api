@@ -5,11 +5,13 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
+@Transactional
 public class EmployeeRepository implements PanacheRepository<Employee> {
 
     public List<Employee> findBetweenDates(final LocalDate fromDate, final LocalDate toDate) {

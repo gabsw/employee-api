@@ -11,7 +11,6 @@ import org.mapstruct.factory.Mappers;
 public interface EmployeeMapper {
     EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
 
-    @Mapping(target = "id", ignore = true)
     EmployeeDTO toDto(Employee employee);
 
     @Mapping(target = "id", ignore = true)

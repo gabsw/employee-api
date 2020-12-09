@@ -6,7 +6,6 @@ import com.tdx.employee.api.employee.model.EmployeeDTO;
 import com.tdx.employee.api.employee.repository.EmployeeRepository;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -63,7 +62,6 @@ public class EmployeeResource {
 
 
     @POST
-    @Transactional
     @Path("/")
     public Response createEmployee(@Valid @NotNull final EmployeeDTO employeeDTO) {
         return repository.create(employeeDTO.toEmployee())
@@ -77,7 +75,6 @@ public class EmployeeResource {
     }
 
     @PUT
-    @Transactional
     @Path("/{id}")
     public Response updateEmployee(@PathParam("id") final Long id, @Valid @NotNull final EmployeeDTO toUpdate) {
         return repository.update(id, toUpdate.toEmployee())
@@ -87,7 +84,6 @@ public class EmployeeResource {
     }
 
     @DELETE
-    @Transactional
     @Path("/{id}")
     public Response deleteEmployee(@PathParam("id") final Long id) {
 //        Follows the Java reference guide

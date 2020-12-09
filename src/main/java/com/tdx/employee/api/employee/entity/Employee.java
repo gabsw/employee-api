@@ -17,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -25,6 +24,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 @Table(name = "employee")
 @TypeDef(
     name = "title",
@@ -45,24 +45,6 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     @Type(type = "title")
     private Title title;
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Employee)) {
-            return false;
-        }
-        final Employee other = (Employee) obj;
-
-        return id != null && id.equals(other.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, startDate, team, title); //TODO: return number?
-    }
 
     public Employee toEmployee(final Employee employee) {
         return EmployeeMapper.INSTANCE.toEmployee(employee, this);
