@@ -19,6 +19,7 @@
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
+    <org.projectlombok.version>1.18.16</org.projectlombok.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -53,7 +54,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.16</version>
+      <version>${org.projectlombok.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -82,6 +83,10 @@
       <artifactId>quarkus-jdbc-postgresql</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-h2</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>junit-jupiter</artifactId>
       <version>1.12.2</version>
@@ -96,6 +101,7 @@
       <artifactId>hibernate-types-52</artifactId>
       <version>2.9.4</version>
     </dependency>
+
   </dependencies>
   <build>
     <plugins>

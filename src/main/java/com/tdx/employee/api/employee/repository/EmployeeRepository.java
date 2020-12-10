@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static com.tdx.employee.api.employee.entity.Employee.FIND_BY_TITLE;
+import static com.tdx.employee.api.employee.entity.Employee.FIND_BY_TITLE_START_DATE;
 import static javax.transaction.Transactional.TxType.REQUIRED;
 
 @ApplicationScoped
@@ -22,23 +22,6 @@ public class EmployeeRepository implements PanacheRepository<Employee> {
 
     @Inject
     EntityManager em;
-
-    public List<Employee> findByTitleUsingNamedQuery(final Title title) {
-        return em.createNamedQuery(FIND_BY_TITLE, Employee.class)
-                 .setParameter("title", title)
-                 .getResultList();
-    }
-
-    // Alternatives using Panache methods
-    public List<Employee> findByTitle(Title title) {
-        return find("title", title).list();
-    }
-
-    public List<Employee> findBetweenDates(final LocalDate fromDate, final LocalDate toDate) {
-        return find("start_date BETWEEN :fromDate AND :toDate",
-                    Parameters.with("fromDate", fromDate).and("toDate", toDate))
-            .list();
-    }
 
     public Optional<Employee> update(final Long id, final Employee employee) {
         return findByIdOptional(id).map(emp -> emp.toEmployee(employee));
@@ -54,6 +37,25 @@ public class EmployeeRepository implements PanacheRepository<Employee> {
             delete(employee);
             return employee;
         });
+    }
+
+    public List<Employee> findByTitleAndStartDate(final Title title, final LocalDate fromDate, final LocalDate toDate) {
+        return em.createNamedQuery(FIND_BY_TITLE_START_DATE, Employee.class)
+                 .setParameter("title", title)
+                 .setParameter("fromDate", fromDate)
+                 .setParameter("toDate", toDate)
+                 .getResultList();
+    }
+
+    // Alternatives using Panache methods
+    public List<Employee> findByTitle(final Title title) {
+        return find("title", title).list();
+    }
+
+    public List<Employee> findBetweenDates(final LocalDate fromDate, final LocalDate toDate) {
+        return find("start_date BETWEEN :fromDate AND :toDate",
+                    Parameters.with("fromDate", fromDate).and("toDate", toDate))
+            .list();
     }
 }
 

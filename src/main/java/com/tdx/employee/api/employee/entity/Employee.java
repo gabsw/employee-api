@@ -31,12 +31,14 @@ import java.time.LocalDate;
     name = "title",
     typeClass = PostgreSQLEnumType.class
 )
-@NamedQuery(name = Employee.FIND_BY_TITLE,
+@NamedQuery(name = Employee.FIND_BY_TITLE_START_DATE,
             query = "SELECT e " +
                     "FROM Employee e " +
-                    "WHERE e.title = :title")
+                    "WHERE (e.title = :title OR CAST(:title AS string) IS NULL) " +
+                    "AND (CAST(:fromDate AS date) IS NULL OR CAST(:toDate AS date) IS NULL " +
+                    "     OR (e.startDate BETWEEN :fromDate and :toDate))")
 public class Employee {
-    public static final String FIND_BY_TITLE = "findByTitle";
+    public static final String FIND_BY_TITLE_START_DATE = "findByTitleAndStartDate";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +54,14 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     @Type(type = "title")
     private Title title;
+
+    @Builder
+    public Employee(final String name, final LocalDate startDate, final String team, final Title title) {
+        this.name = name;
+        this.startDate = startDate;
+        this.team = team;
+        this.title = title;
+    }
 
     public Employee toEmployee(final Employee employee) {
         return EmployeeMapper.INSTANCE.toEmployee(employee, this);
