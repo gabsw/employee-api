@@ -51,7 +51,6 @@ public class EmployeeRepositoryIT {
         entityManager.persist(persistedAgent2020);
         entityManager.persist(persistedSupervisor2019);
         entityManager.persist(persistedSupervisor2020);
-        entityManager.flush();
     }
 
     @Test

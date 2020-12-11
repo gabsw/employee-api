@@ -5,6 +5,8 @@ import com.tdx.employee.api.employee.entity.Employee;
 import com.tdx.employee.api.employee.entity.Title;
 import com.tdx.employee.api.employee.model.EmployeeDTO;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
+import io.restassured.config.ObjectMapperConfig;
 import io.restassured.http.ContentType;
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.response.Response;
@@ -17,11 +19,13 @@ import javax.json.bind.Jsonb;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.tdx.employee.api.RestApplication.APP_PATH;
 import static com.tdx.employee.api.employee.resource.EmployeeResource.RESOURCE_PATH;
 import static io.restassured.RestAssured.given;
 import static javax.ws.rs.core.Response.Status.CREATED;
@@ -37,6 +41,9 @@ public class EmployeeResourceIT {
 
     @Inject
     EntityManager entityManager;
+
+    private final String pathWithoutParams = APP_PATH + RESOURCE_PATH + "/";
+    private final String pathWithIdParam = APP_PATH + RESOURCE_PATH + "/{id}";
 
     private final long existingId = 1L;
     private final long unknownId = 1000L;
@@ -66,13 +73,14 @@ public class EmployeeResourceIT {
         entityManager.persist(persistedAgent2020);
         entityManager.persist(persistedSupervisor2019);
         entityManager.persist(persistedSupervisor2020);
-        entityManager.flush();
+    }
+
+    static {
+        RestAssured.config = RestAssured.config().objectMapperConfig(new ObjectMapperConfig(ObjectMapperType.JSONB));
     }
 
     @Test
     void givenExistingId_afterRead_returnCorrespondingEmployee() {
-        final String path = RESOURCE_PATH + "/{id}";
-
         final Employee read =
             new Employee(existingId,
                          "John",
@@ -82,49 +90,44 @@ public class EmployeeResourceIT {
 
         Employee result = given()
             .when()
-            .get(path, existingId)
+            .get(pathWithIdParam, existingId)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
             .body()
-            .as(Employee.class);
+            .as(Employee.class, ObjectMapperType.JSONB);
         Assertions.assertEquals(read, result);
     }
 
     @Test
     void givenUnknownId_afterRead_returnStatusNotFound() {
-        final String path = RESOURCE_PATH + "/{id}";
         given()
             .when()
-            .get(path, unknownId)
+            .get(pathWithIdParam, unknownId)
             .then()
             .statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
     void givenExistingId_afterDelete_returnNoContent() {
-        final String path = RESOURCE_PATH + "/{id}";
         given()
             .when()
-            .delete(path, existingId)
+            .delete(pathWithIdParam, existingId)
             .then()
             .statusCode(NO_CONTENT.getStatusCode());
     }
 
     @Test
     void givenUnknownId_afterDelete_returnStatusNotFound() {
-        final String path = RESOURCE_PATH + "/{id}";
         given()
             .when()
-            .delete(path, unknownId)
+            .delete(pathWithIdParam, unknownId)
             .then()
             .statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
     void givenUnknownId_afterUpdate_returnStatusNotFound() {
-        final String path = RESOURCE_PATH + "/{id}";
-
         final EmployeeDTO toUpdate =
             new EmployeeDTO("John",
                             LocalDate.of(2020, 2, 9),
@@ -135,15 +138,13 @@ public class EmployeeResourceIT {
             .when()
             .contentType("application/json")
             .body(jsonb.toJson(toUpdate))
-            .put(path, unknownId)
+            .put(pathWithIdParam, unknownId)
             .then()
             .statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
     void givenValidEmployeeDTO_afterUpdate_returnUpdatedEmployee() {
-        final String path = RESOURCE_PATH + "/{id}";
-
         final EmployeeDTO toUpdate =
             new EmployeeDTO("John",
                             LocalDate.of(2020, 2, 9),
@@ -161,7 +162,7 @@ public class EmployeeResourceIT {
             .when()
             .contentType("application/json")
             .body(jsonb.toJson(toUpdate))
-            .put(path, existingId)
+            .put(pathWithIdParam, existingId)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
@@ -173,9 +174,6 @@ public class EmployeeResourceIT {
 
     @Test
     void givenValidEmployeeDTO_afterCreate_returnCreatedEmployee() {
-        final String postPath = RESOURCE_PATH + "/";
-        final String getPath = RESOURCE_PATH + "/{id}";
-
         final EmployeeDTO toCreate =
             new EmployeeDTO("Tom",
                             LocalDate.of(2019, 2, 9),
@@ -194,7 +192,7 @@ public class EmployeeResourceIT {
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
             .body(jsonb.toJson(toCreate))
-            .post(postPath)
+            .post(pathWithoutParams)
             .then()
             .statusCode(CREATED.getStatusCode())
             .extract()
@@ -205,7 +203,7 @@ public class EmployeeResourceIT {
 
         Employee result = given()
             .when()
-            .get(getPath, Integer.valueOf(id))
+            .get(pathWithIdParam, Integer.valueOf(id))
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
@@ -217,15 +215,13 @@ public class EmployeeResourceIT {
 
     @Test
     void givenTitle_afterRead_returnEmployeeList() {
-        final String path = RESOURCE_PATH + "/";
-
         List<Employee> agents = Stream.of(persistedAgent2020)
                                     .collect(Collectors.toList());
 
         List<Employee> result = given()
             .queryParam("title", "AGENT")
             .when()
-            .get(path)
+            .get(pathWithoutParams)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
@@ -237,16 +233,16 @@ public class EmployeeResourceIT {
 
     @Test
     void givenDates_afterRead_returnEmployeeList() {
-        final String path = RESOURCE_PATH + "/";
-
         List<Employee> startedAt2020 = Stream.of(persistedAgent2020, persistedSupervisor2020)
                                       .collect(Collectors.toList());
 
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+
         List<Employee> result = given()
-            .queryParam("from_date", "2020-01-01")
-            .queryParam("to_date", "2020-12-31")
+            .queryParam("from_date", LocalDate.of(2020, 1, 1).format(formatter))
+            .queryParam("to_date", LocalDate.of(2020, 12, 31).format(formatter))
             .when()
-            .get(path)
+            .get(pathWithoutParams)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
@@ -258,14 +254,12 @@ public class EmployeeResourceIT {
 
     @Test
     void givenNoFilterParams_afterRead_returnListWithAllEmployees() {
-        final String path = RESOURCE_PATH + "/";
-
         List<Employee> all = Stream.of(persistedAgent2020, persistedSupervisor2019, persistedSupervisor2020)
                                              .collect(Collectors.toList());
 
         List<Employee> result = given()
             .when()
-            .get(path)
+            .get(pathWithoutParams)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
@@ -277,8 +271,6 @@ public class EmployeeResourceIT {
 
     @Test
     void givenNoMatchingFilterParams_afterRead_returnEmptyEmployeesList() {
-        final String path = RESOURCE_PATH + "/";
-
         List<Employee> empty = Collections.emptyList();
 
         List<Employee> result = given()
@@ -286,7 +278,7 @@ public class EmployeeResourceIT {
             .queryParam("from_date", "2030-01-01")
             .queryParam("to_date", "2040-12-31")
             .when()
-            .get(path)
+            .get(pathWithoutParams)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()

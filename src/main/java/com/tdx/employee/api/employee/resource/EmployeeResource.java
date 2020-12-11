@@ -30,7 +30,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class EmployeeResource {
-    public static final String RESOURCE_PATH = "/api/employee";
+    public static final String RESOURCE_PATH = "/employee";
 
     @Context
     UriInfo uriInfo;
@@ -40,7 +40,7 @@ public class EmployeeResource {
 
     @GET
     @Path("/{id}")
-    public Response getById(@PathParam("id") final Long id) {
+    public Response getById(@PathParam("id") @NotNull final Long id) {
         return repository.findByIdOptional(id)
                          .map(Response::ok)
                          .orElse(Response.status(NOT_FOUND))
@@ -71,7 +71,7 @@ public class EmployeeResource {
 
     @PUT
     @Path("/{id}")
-    public Response updateEmployee(@PathParam("id") final Long id, @Valid @NotNull final EmployeeDTO toUpdate) {
+    public Response updateEmployee(@PathParam("id") @NotNull final Long id, @Valid @NotNull final EmployeeDTO toUpdate) {
         return repository.update(id, toUpdate.toEmployee())
                          .map(Response::ok)
                          .orElse(Response.status(NOT_FOUND))
@@ -80,7 +80,7 @@ public class EmployeeResource {
 
     @DELETE
     @Path("/{id}")
-    public Response deleteEmployee(@PathParam("id") final Long id) {
+    public Response deleteEmployee(@PathParam("id") @NotNull final Long id) {
 //        Following the Java reference guide
 //        return repository.delete(id)
 //            .map(emp -> Response.noContent())
