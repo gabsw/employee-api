@@ -1,16 +1,13 @@
 {
-	"variables": [],
 	"info": {
+		"_postman_id": "623bdb3b-24a4-486f-9b66-9d924fc091a1",
 		"name": "Employee Api",
-		"_postman_id": "606df317-44d0-ada0-3c2f-7ec1510db5cc",
-		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "post employee",
 			"request": {
-				"url": "{{url}}/api/employee/",
 				"method": "POST",
 				"header": [
 					{
@@ -22,31 +19,23 @@
 					"mode": "raw",
 					"raw": "{ \n\t\"name\": \"Gabriela\",\n\t\"start_date\": \"2020-08-29\",\n\t\"team\": \"Helios\",\n\t\"title\": \"AGENT\"\n\t\n}"
 				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "delete employee by id",
-			"request": {
 				"url": {
-					"raw": "{{url}}/api/employee/:id",
+					"raw": "{{url}}/api/employee/",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
 						"employee",
-						":id"
-					],
-					"query": [],
-					"variable": [
-						{
-							"key": "id",
-							"value": "1"
-						}
+						""
 					]
-				},
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete employee by id",
+			"request": {
 				"method": "DELETE",
 				"header": [
 					{
@@ -58,13 +47,6 @@
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "get employee by id",
-			"request": {
 				"url": {
 					"raw": "{{url}}/api/employee/:id",
 					"host": [
@@ -75,14 +57,19 @@
 						"employee",
 						":id"
 					],
-					"query": [],
 					"variable": [
 						{
 							"key": "id",
 							"value": "1"
 						}
 					]
-				},
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get employee by id",
+			"request": {
 				"method": "GET",
 				"header": [
 					{
@@ -90,17 +77,6 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "put employee by id",
-			"request": {
 				"url": {
 					"raw": "{{url}}/api/employee/:id",
 					"host": [
@@ -111,14 +87,19 @@
 						"employee",
 						":id"
 					],
-					"query": [],
 					"variable": [
 						{
 							"key": "id",
-							"value": "5"
+							"value": "1"
 						}
 					]
-				},
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put employee by id",
+			"request": {
 				"method": "PUT",
 				"header": [
 					{
@@ -130,13 +111,31 @@
 					"mode": "raw",
 					"raw": "{ \n\t\"name\": \"Nori\",\n\t\"start_date\": \"2020-08-29\",\n\t\"team\": \"Helios\",\n\t\"title\": \"AGENT\"\n\t\n}"
 				},
-				"description": ""
+				"url": {
+					"raw": "{{url}}/api/employee/:id",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"employee",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "5"
+						}
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "get by title",
 			"request": {
+				"method": "GET",
+				"header": [],
 				"url": {
 					"raw": "{{url}}/api/employee/?title=AGENT",
 					"host": [
@@ -152,22 +151,16 @@
 							"key": "title",
 							"value": "AGENT"
 						}
-					],
-					"variable": []
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "get by start date",
 			"request": {
+				"method": "GET",
+				"header": [],
 				"url": {
 					"raw": "{{url}}/api/employee/?from_date=2019-09-07&to_date=2020-10-07",
 					"host": [
@@ -187,22 +180,16 @@
 							"key": "to_date",
 							"value": "2020-10-07"
 						}
-					],
-					"variable": []
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "get by title start date",
 			"request": {
+				"method": "GET",
+				"header": [],
 				"url": {
 					"raw": "{{url}}/api/employee/?from_date=2020-09-07&to_date=2020-12-07&title=AGENT",
 					"host": [
@@ -226,68 +213,114 @@
 							"key": "title",
 							"value": "AGENT"
 						}
-					],
-					"variable": []
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "hello world all",
 			"request": {
-				"url": "{{url}}/api/hello/",
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
+				"url": {
+					"raw": "{{url}}/api/hello/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"hello",
+						""
+					]
+				}
 			},
 			"response": []
 		},
 		{
-			"name": "hello world metrics",
+			"name": "call hello world metrics",
 			"request": {
-				"url": "{{url}}/api/hello/metrics",
 				"method": "GET",
 				"header": [],
-				"body": {},
-				"description": ""
+				"url": {
+					"raw": "{{url}}/api/hello/metrics",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"hello",
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get hello world metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/hello/metrics",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"hello",
+						"metrics"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "health check",
 			"request": {
-				"url": "{{url}}/health",
 				"method": "GET",
 				"header": [],
-				"body": {},
-				"description": ""
+				"url": {
+					"raw": "{{url}}/health",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"health"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "hello world secured",
 			"request": {
-				"url": "{{url}}/api/hello/secured",
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTcwMDk0MTcxLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MjIwMDgxNDE3MSwiaWF0IjoxNTcwMDk0MTcxLCJqdGkiOiJhLTEyMyJ9.Hzr41h3_uewy-g2B-sonOiBObtcpkgzqmF4bT3cO58v45AIOiegl7HIx7QgEZHRO4PdUtR34x9W23VJY7NJ545ucpCuKnEV1uRlspJyQevfI-mSRg1bHlMmdDt661-V3KmQES8WX2B2uqirykO5fCeCp3womboilzCq4VtxbmM2qgf6ag8rUNnTCLuCgEoulGwTn0F5lCrom-7dJOTryW1KI0qUWHMMwl4TX5cLmqJLgBzJapzc5_yEfgQZ9qXzvsT8zeOWSKKPLm7LFVt2YihkXa80lWcjewwt61rfQkpmqSzAHL0QIs7CsM9GfnoYc0j9po83-P3GJiBMMFmn-vg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
+				"url": {
+					"raw": "{{url}}/api/hello/secured",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"hello",
+						"secured"
+					]
+				}
 			},
 			"response": []
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
