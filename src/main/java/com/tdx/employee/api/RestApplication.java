@@ -17,7 +17,7 @@ import javax.ws.rs.core.Application;
 import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.PATH;
 import static org.eclipse.microprofile.openapi.annotations.enums.SchemaType.STRING;*/
 
-@ApplicationPath(RestApplication.APP_PATH)
+@ApplicationPath(ApiPaths.BASE_PATH)
 /*@OpenAPIDefinition(
     info = @Info(
         title = "BE Onboarding Project",
@@ -62,5 +62,4 @@ import static org.eclipse.microprofile.openapi.annotations.enums.SchemaType.STRI
     )
 )*/
 public class RestApplication extends Application {
-    public static final String APP_PATH = "/api";
 }

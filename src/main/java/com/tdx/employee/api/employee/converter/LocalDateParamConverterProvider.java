@@ -9,13 +9,13 @@ import java.time.LocalDate;
 
 // Original code from: https://blog.sebastian-daschner.com/entries/jaxrs-convert-params
 
-@Provider
+@Provider // Forwards the parameter to the actual converter
 public class LocalDateParamConverterProvider implements ParamConverterProvider {
     @Override
-    public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType,
-                                              Annotation[] annotations) {
-        if (rawType.equals(LocalDate.class))
-            return (ParamConverter<T>) new LocalDateConverter();
+    public <T> ParamConverter<T> getConverter(
+        Class<T> rawType, Type genericType,
+        Annotation[] annotations) {
+        if (rawType.equals(LocalDate.class)) { return (ParamConverter<T>) new LocalDateConverter(); }
         return null;
     }
 }

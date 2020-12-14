@@ -1,6 +1,7 @@
 package com.tdx.employee.api.employee.resource;
 
 
+import com.tdx.employee.api.ApiPaths;
 import com.tdx.employee.api.employee.entity.Employee;
 import com.tdx.employee.api.employee.entity.Title;
 import com.tdx.employee.api.employee.model.EmployeeDTO;
@@ -25,8 +26,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.tdx.employee.api.RestApplication.APP_PATH;
-import static com.tdx.employee.api.employee.resource.EmployeeResource.RESOURCE_PATH;
 import static io.restassured.RestAssured.given;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -41,9 +40,6 @@ public class EmployeeResourceIT {
 
     @Inject
     EntityManager entityManager;
-
-    private final String pathWithoutParams = APP_PATH + RESOURCE_PATH + "/";
-    private final String pathWithIdParam = APP_PATH + RESOURCE_PATH + "/{id}";
 
     private final long existingId = 1L;
     private final long unknownId = 1000L;
@@ -90,12 +86,12 @@ public class EmployeeResourceIT {
 
         Employee result = given()
             .when()
-            .get(pathWithIdParam, existingId)
+            .get(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.GET_EMPLOYEE, existingId)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
             .body()
-            .as(Employee.class, ObjectMapperType.JSONB);
+            .as(Employee.class);
         Assertions.assertEquals(read, result);
     }
 
@@ -103,7 +99,7 @@ public class EmployeeResourceIT {
     void givenUnknownId_afterRead_returnStatusNotFound() {
         given()
             .when()
-            .get(pathWithIdParam, unknownId)
+            .get(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.GET_EMPLOYEE, unknownId)
             .then()
             .statusCode(NOT_FOUND.getStatusCode());
     }
@@ -112,7 +108,7 @@ public class EmployeeResourceIT {
     void givenExistingId_afterDelete_returnNoContent() {
         given()
             .when()
-            .delete(pathWithIdParam, existingId)
+            .delete(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.DELETE, existingId)
             .then()
             .statusCode(NO_CONTENT.getStatusCode());
     }
@@ -121,7 +117,7 @@ public class EmployeeResourceIT {
     void givenUnknownId_afterDelete_returnStatusNotFound() {
         given()
             .when()
-            .delete(pathWithIdParam, unknownId)
+            .delete(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.DELETE, unknownId)
             .then()
             .statusCode(NOT_FOUND.getStatusCode());
     }
@@ -138,7 +134,7 @@ public class EmployeeResourceIT {
             .when()
             .contentType("application/json")
             .body(jsonb.toJson(toUpdate))
-            .put(pathWithIdParam, unknownId)
+            .put(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.UPDATE, unknownId)
             .then()
             .statusCode(NOT_FOUND.getStatusCode());
     }
@@ -162,12 +158,12 @@ public class EmployeeResourceIT {
             .when()
             .contentType("application/json")
             .body(jsonb.toJson(toUpdate))
-            .put(pathWithIdParam, existingId)
+            .put(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.UPDATE, existingId)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
             .body()
-            .as(Employee.class, ObjectMapperType.JSONB);
+            .as(Employee.class);
 
         Assertions.assertEquals(updated, result);
     }
@@ -192,7 +188,7 @@ public class EmployeeResourceIT {
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
             .body(jsonb.toJson(toCreate))
-            .post(pathWithoutParams)
+            .post(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.CREATE)
             .then()
             .statusCode(CREATED.getStatusCode())
             .extract()
@@ -203,12 +199,12 @@ public class EmployeeResourceIT {
 
         Employee result = given()
             .when()
-            .get(pathWithIdParam, Integer.valueOf(id))
+            .get(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.GET_EMPLOYEE, Integer.valueOf(id))
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
             .body()
-            .as(Employee.class, ObjectMapperType.JSONB);
+            .as(Employee.class);
 
         Assertions.assertEquals(created, result);
     }
@@ -221,7 +217,7 @@ public class EmployeeResourceIT {
         List<Employee> result = given()
             .queryParam("title", "AGENT")
             .when()
-            .get(pathWithoutParams)
+            .get(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.GET_EMPLOYEES)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
@@ -242,7 +238,7 @@ public class EmployeeResourceIT {
             .queryParam("from_date", LocalDate.of(2020, 1, 1).format(formatter))
             .queryParam("to_date", LocalDate.of(2020, 12, 31).format(formatter))
             .when()
-            .get(pathWithoutParams)
+            .get(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.GET_EMPLOYEES)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
@@ -259,7 +255,7 @@ public class EmployeeResourceIT {
 
         List<Employee> result = given()
             .when()
-            .get(pathWithoutParams)
+            .get(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.GET_EMPLOYEES)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
@@ -278,7 +274,7 @@ public class EmployeeResourceIT {
             .queryParam("from_date", "2030-01-01")
             .queryParam("to_date", "2040-12-31")
             .when()
-            .get(pathWithoutParams)
+            .get(ApiPaths.BASE_PATH + ApiPaths.EMPLOYEE + ApiPaths.GET_EMPLOYEES)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()

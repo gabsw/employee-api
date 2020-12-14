@@ -1,58 +1,45 @@
-# employee-api project
+# Employee REST API
+## Abstract
+This is a start up exercise for the BE onboarding at Talkdesk. It implements CRUD APIs for an Employee Resource.
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+## Prerequisites
+* Maven 3.6.3
+* OpenJDK 11
+* Docker and docker-compose
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+## How to run the database
+To build the containers for the first time, make sure that you are in the same folder as `docker-compose.yml` and use following command:
+`docker-compose up --build`
 
-## Running the application in dev mode
+To start and stop without rebuilding the containers, use the following commands:
+`docker-compose start` or `docker-compose start -d` (run in detached mode)
+`docker-compose stop` or `docker-compose stop -d` (run in detached mode)
 
-You can run your application in dev mode that enables live coding using:
-```shell script
-./mvnw compile quarkus:dev
-```
+## Updating Postgresql Init Files
 
-## Packaging and running the application
+If you want to update the init sql files and you have already executed `docker-compose up --build`,
+then you must delete the postgresql volume that holds the pgdata.
 
-The application can be packaged using:
-```shell script
-./mvnw package
-```
-It produces the `employee-api-1.0.0-SNAPSHOT-runner.jar` file in the `/target` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/lib` directory.
+To do that:
+1. Destroy the containers with `docker-compose rm`
+2. Destroy the `postgres_data` volume with `docker volume rm postgres_data`
 
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
+After that, you can simply run `docker-compose up` again.
 
-The application is now runnable using `java -jar target/employee-api-1.0.0-SNAPSHOT-runner.jar`.
+Note that erasing the volume will remove all data.
 
-## Creating a native executable
+## Tests
+In order to run all the tests:
+1. Start the database with `docker-compose up db`.
+2. Run `mvn clean test integration-test`. Note that this will truncate tables in the database.
 
-You can create a native executable using: 
-```shell script
-./mvnw package -Pnative
-```
+# Quarkus without Docker
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
-```
+# PostgreSQL without Docker
 
-You can then execute your native executable with: `./target/employee-api-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html.
-
-# RESTEasy JAX-RS
-
-<p>A Hello World RESTEasy resource</p>
-
-Guide: https://quarkus.io/guides/rest-json
-
-# PostgreSQL
-
-Create database:
+Create databases:
 `createdb employees_db`
+`createdb test_db`
 
 Create user with password:
 `psql employees_db`
@@ -65,3 +52,10 @@ Start and stop the database server:
 
 How to connect to db:
 `psql postgresql://app_user:complex_password@localhost:5432/employees_db`
+
+## Author
+Gabriela Santos
+
+## Resources
+* [Employee REST API documentation](http://localhost:8080/swagger-ui.html#/)
+* [Postman collection](https://github.com/gabsw/employee-api/blob/main/Employee%20Api.postman_collection.json)

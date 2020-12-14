@@ -42,14 +42,18 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
     @NotNull
+    @Column
     private String name;
     @Column(name = "start_date")
     @NotNull
     private LocalDate startDate;
+    @Column
     @NotNull
     private String team;
+    @Column
     @NotNull
     @Enumerated(EnumType.STRING)
     @Type(type = "title")

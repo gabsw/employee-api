@@ -4,17 +4,15 @@ import com.tdx.employee.api.employee.entity.Employee;
 import com.tdx.employee.api.employee.entity.Title;
 import com.tdx.employee.api.employee.mapper.EmployeeMapper;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.json.bind.annotation.JsonbProperty;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeDTO {

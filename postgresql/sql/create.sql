@@ -6,6 +6,6 @@ CREATE TABLE employee
     name            VARCHAR(100)             NOT NULL,
     start_date      DATE                     NOT NULL,
     team            VARCHAR(20)              NOT NULL,
-    title           INT                      NOT NULL,
+    title           title                    NOT NULL,
     PRIMARY KEY (id)
 );

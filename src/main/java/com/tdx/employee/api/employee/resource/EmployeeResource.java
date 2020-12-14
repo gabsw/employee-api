@@ -1,5 +1,6 @@
 package com.tdx.employee.api.employee.resource;
 
+import com.tdx.employee.api.ApiPaths;
 import com.tdx.employee.api.employee.entity.Employee;
 import com.tdx.employee.api.employee.entity.Title;
 import com.tdx.employee.api.employee.model.EmployeeDTO;
@@ -26,12 +27,10 @@ import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
-@Path(EmployeeResource.RESOURCE_PATH)
+@Path(ApiPaths.EMPLOYEE)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class EmployeeResource {
-    public static final String RESOURCE_PATH = "/employee";
-
     @Context
     UriInfo uriInfo;
 
@@ -39,7 +38,7 @@ public class EmployeeResource {
     EmployeeRepository repository;
 
     @GET
-    @Path("/{id}")
+    @Path(ApiPaths.GET_EMPLOYEE)
     public Response getById(@PathParam("id") @NotNull final Long id) {
         return repository.findByIdOptional(id)
                          .map(Response::ok)
@@ -48,21 +47,22 @@ public class EmployeeResource {
     }
 
     @GET
-    @Path("/")
-    public Response filterByTitleAndStartDate(@QueryParam("title") final Title title,
-                               @QueryParam("from_date") final LocalDate fromDate,
-                               @QueryParam("to_date") final LocalDate toDate) {
+    @Path(ApiPaths.GET_EMPLOYEES)
+    public Response filterByTitleAndStartDate(
+        @QueryParam("title") final Title title,
+        @QueryParam("from_date") final LocalDate fromDate,
+        @QueryParam("to_date") final LocalDate toDate) {
         final List<Employee> employees = repository.findByTitleAndStartDate(title, fromDate, toDate);
         return Response.ok(employees).build();
     }
 
     @POST
-    @Path("/")
+    @Path(ApiPaths.CREATE)
     public Response createEmployee(@Valid @NotNull final EmployeeDTO employeeDTO) {
         return repository.create(employeeDTO.toEmployee())
                          .map(emp -> uriInfo.getAbsolutePathBuilder()
-                                             .path(RESOURCE_PATH)
-                                             .queryParam("id", emp.getId())
+                                            .path(ApiPaths.EMPLOYEE)
+                                            .queryParam("id", emp.getId())
                                             .build())
                          .map(Response::created)
                          .orElse(Response.status(NOT_FOUND))
@@ -70,8 +70,10 @@ public class EmployeeResource {
     }
 
     @PUT
-    @Path("/{id}")
-    public Response updateEmployee(@PathParam("id") @NotNull final Long id, @Valid @NotNull final EmployeeDTO toUpdate) {
+    @Path(ApiPaths.UPDATE)
+    public Response updateEmployee(
+        @PathParam("id") @NotNull final Long id,
+        @Valid @NotNull final EmployeeDTO toUpdate) {
         return repository.update(id, toUpdate.toEmployee())
                          .map(Response::ok)
                          .orElse(Response.status(NOT_FOUND))
@@ -79,7 +81,7 @@ public class EmployeeResource {
     }
 
     @DELETE
-    @Path("/{id}")
+    @Path(ApiPaths.DELETE)
     public Response deleteEmployee(@PathParam("id") @NotNull final Long id) {
 //        Following the Java reference guide
 //        return repository.delete(id)
