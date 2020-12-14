@@ -61,5 +61,5 @@ How to connect to db:
 Gabriela Santos
 
 ## Resources
-* [Employee REST API documentation](http://localhost:8080/swagger-ui.html#/)
+* [Employee REST API documentation](http://localhost:8080/swagger-ui.html#/) (Application must be running first.)
 * [Postman collection](https://github.com/gabsw/employee-api/blob/main/Employee%20Api.postman_collection.json)
