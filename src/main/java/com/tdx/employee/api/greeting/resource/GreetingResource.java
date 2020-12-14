@@ -37,7 +37,7 @@ public class GreetingResource {
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/metrics")
     @Counted(name = "countGetHello",
              description = "Counts how many times the helloMetrics method has been invoked")
