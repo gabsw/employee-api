@@ -15,6 +15,8 @@ To start and stop without rebuilding the containers, use the following commands:
 `docker-compose start` or `docker-compose start -d` (run in detached mode)
 `docker-compose stop` or `docker-compose stop -d` (run in detached mode)
 
+`docker-compose down -v` will destroy the containers with all the volumes.
+
 ## Updating Postgresql Init Files
 
 If you want to update the init sql files and you have already executed `docker-compose up --build`,
@@ -34,6 +36,8 @@ In order to run all the tests:
 2. Run `mvn clean test integration-test`. Note that this will truncate tables in the database.
 
 # Quarkus without Docker
+How to run the application:
+`./mvnw compile quarkus:dev`
 
 # PostgreSQL without Docker
 

@@ -12,12 +12,6 @@ services:
     ports:
       - "5432:5432"
     restart: always
-    networks:
-      - postgres-network
-
-networks:
-  postgres-network:
-    driver: "bridge"
 
 volumes:
   postgres_data:
